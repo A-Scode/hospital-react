@@ -1,0 +1,33 @@
+.flex_container{
+    display: flex;
+    width: 80vw;
+    background-color: rgba(255, 20, 20, 0.678);
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding : 50px;
+    border-radius: 20px;
+    min-width: 300px;justify-content: space-around;place-items: center;
+}
+.choices{
+    display: flex;flex-direction: column;
+    font-size: 30px; font-weight: 500;
+    color:white; text-decoration: none;
+}.flex_container img{
+    margin:20px;transition: all 1s cubic-bezier(0.075, 0.82, 0.165, 1);
+    animation : fadeScale 1s ease-in ;
+}.flex_container img:hover{
+    transform: scale(1.05);
+}.flex_container img:active{
+    transform: scale(1);;
+}
+
+@keyframes fadeScale {
+    0%{
+        opacity: 0;
+        transform: scale(1.1);
+    }
+    100%{
+        opacity: 1;
+        transform: scale(1);
+    }
+}

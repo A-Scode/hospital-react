@@ -1,0 +1,38 @@
+.login_container{
+    display: flex;justify-content: space-around;
+    width : auto ;min-width: 300px;
+    border-radius: 20px;
+    background-image: linear-gradient(to bottom right,  rgba(213, 29, 29, 0.875) , rgba(83, 3, 255, 0.815));padding : 20px;
+    background-blend-mode: lighten; animation : fadeScale 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+}form.login{
+    display: flex;flex-direction: column;
+    align-items: center; width: 250px;
+}form.login>*{
+    margin: 10px 0;
+}form.login>label:not(label[for="img"]){
+    align-self: flex-start;font-size: 25px ;font-weight: 500;
+    color: white;
+}form.login>input{
+    background-color: transparent;color: white;
+    outline: none;border:0;padding: 3px;font-size: 20px;
+    border-bottom: 1px solid white; width: 80%;
+}button.submit{
+    background-color: transparent;
+    border-radius: 20px; padding: 5px 15px; margin :30px 0;
+    border : 2px solid white; color: white; transition: all 0.2s ease-in;
+}button.submit:hover{transform: scale(1.05);}
+button.submit:active{transform: scale(1);color:black;background-color: white;}
+
+.error{
+    border-color: #fffb00 !important;color: #fffb00 !important;
+}
+
+
+@keyframes fadeScale {
+    0%{
+        opacity: 0; transform: scale(1.1);
+    }
+    100%{
+        opacity: 1; transform: scale(1);
+    }
+}

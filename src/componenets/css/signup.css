@@ -1,0 +1,59 @@
+
+.signup_container{
+    width: 700px;
+}
+.signup_form{
+    display: grid!important; width: 600px !important;
+    grid-template-columns: 175px 175px 250px;
+    grid-template-rows: 50px 50px 50px 50px 50px 50px 50px 50px 100px ;
+
+    grid-template-areas: "firstname lastname img"
+                         "infirstname inlastname img"
+                         "username email img"
+                         "inusername inemail img"
+                         "pass confirmpass img"
+                         "inpass inconfirmpass img"
+                         "addr addr img"
+                         "inaddr inaddr img"
+                         "submit submit img"
+    ;
+}
+.signup_form label{
+    font-size: 18px !important;justify-self: left;
+    align-self:end ;margin-bottom: 0;
+}
+.signup_form input{
+    align-self: flex-start;margin-top: 0;
+}
+
+label[for="img"]{grid-area : img}
+label[for="firstname"]{grid-area : firstname}
+input#firstname{grid-area : infirstname}
+label[for="lastname"]{grid-area : lastname}
+input#lastname{grid-area : inlastname}
+label[for="username"]{grid-area : username}
+input#username{grid-area : inusername}
+label[for="email"]{grid-area : email}
+input#email{grid-area : inemail}
+label[for="pass"]{grid-area : pass}
+input#pass{grid-area : inpass}
+label[for="confirmpass"]{grid-area : confirmpass}
+input#confirmpass{grid-area : inconfirmpass}
+label[for="addr"]{grid-area : addr}
+input#addr{grid-area : inaddr}
+
+input::placeholder{
+    color: rgba(255, 255, 255, 0.611);
+}
+
+button.submit{
+    grid-area: submit;
+    width: fit-content;justify-self: center;
+}
+
+label[for="img"]{
+    display: block;width :225px ;height: 225px;
+    align-self: center;justify-self: center;
+    backdrop-filter: blur(4px);border: 1px solid white;
+    border-radius: 100%;background: center no-repeat;background-size: 100px 100px;
+}

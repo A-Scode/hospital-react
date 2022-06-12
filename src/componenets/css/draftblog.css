@@ -1,0 +1,16 @@
+@media (min-width : 700px){
+    div.draft_container{
+        margin-left: 300px;
+    }
+}
+
+div.draft_container{
+    min-height : 400px;min-width: 300px;
+    display: flex;border-radius: 20px;
+    flex-direction: column;width: 500px;
+    border : 2px solid rgba(253, 50, 50, 0.576);
+    box-shadow: 5px 5px 15px 5px rgba(80, 80, 80, 0.5);
+    padding: 10px;
+}div.draft_container:hover{
+    box-shadow: 5px 5px 15px 5px rgba(80, 80, 80, 0.5), inset 5px 5px 15px 5px rgba(80, 80, 80, 0.5);
+}
