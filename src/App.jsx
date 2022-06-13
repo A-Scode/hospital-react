@@ -12,6 +12,8 @@ import { Dashboard } from './componenets/dashboard';
 import { Menubar } from './componenets/menubar'
 import { Draftblog } from './componenets/draft_blog'
 import { Uploadblog } from './componenets/uploadblog'
+import { Blog } from './componenets/blog'
+import { Blogcategory } from './componenets/blogscategory'
 
 
 const user_data_conext = React.createContext({});
@@ -24,7 +26,13 @@ function App() {
       
   const change_login_context = useCallback(data=>{
     set_login_context(data);
+    localStorage.setItem("login_context" , JSON.stringify(data)) ;
   },[])
+
+  useEffect(()=>{
+    var data  = JSON.parse(localStorage.getItem("login_context"));
+    change_login_context(data);
+  },[] )
 
     const chage_user_data = data=>{
       set_user_data_state(data);
@@ -83,8 +91,14 @@ function App() {
         <Route exact path = "/:user_id/drafts" >
           <Draftblog  />
         </Route>
-        <Route exact path = "/:user_id/upload-blog" >
+        <Route exact path = "/:user_id/upload-blog/:blog_id?" >
           <Uploadblog />          
+        </Route>
+        <Route exact path = "/:user_id?/Blog/:blog_id">
+          <Blog  />
+        </Route>
+        <Route exact path = "/:user_id?/BlogsCategory">
+          <Blogcategory />
         </Route>
   </Switch>
         </>

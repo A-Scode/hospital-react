@@ -66,6 +66,7 @@ const Menubar = props=>{
                 }else{
                     props.change_login_context({login:false});
                     props.chage_user_data({...props.user_data , login : false});
+                    localStorage.clear();
                     history.push("/");
                 }
             }
@@ -85,7 +86,7 @@ const Menubar = props=>{
                 <span className="icon" style = {{backgroundImage:`url(${dashboard_logo})`}} ></span>
                 <div className="nav_button">Dashboard</div>
             </Link>
-            <Link>
+            <Link to = "/BlogsCategory">
                 <span className="icon" style = {{backgroundImage:`url(${blog_logo})`}} ></span>
                 <div className="nav_button">Blogs</div>
             </Link>

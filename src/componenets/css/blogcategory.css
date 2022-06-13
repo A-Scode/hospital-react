@@ -1,0 +1,20 @@
+div.blogs{
+    display: flex;flex-direction: column; flex-wrap: wrap;
+    gap: 10px;width : 100%; min-height: calc(100vh - 70px);
+    padding : 20px 10px;
+}
+div.blogs h2{
+    text-align: left;font-weight: 600;
+}
+div.blogs div.blogcategory{
+    display: flex; flex-direction: row;margin: 20px 10px;
+    min-height: 300px;border:2px solid rgb(0, 106, 255);
+    border-radius: 20px;gap: 5px;place-items: center; justify-content: center;
+    max-width: 1000px;flex-wrap: wrap;
+}
+
+@media(min-width : 700px){
+    div.blogs{
+        margin-left: 300px;
+    }
+}

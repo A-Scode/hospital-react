@@ -14,3 +14,12 @@ div.draft_container{
 }div.draft_container:hover{
     box-shadow: 5px 5px 15px 5px rgba(80, 80, 80, 0.5), inset 5px 5px 15px 5px rgba(80, 80, 80, 0.5);
 }
+button.new_blog{
+    border-radius: 30px;padding : 5px 15px;
+    background-color: rgb(41, 123, 255);color: white;
+    border:2px solid white;transition-duration: 0.2s;
+    margin:10px auto;
+}
+button:active{
+    transform: scale(0.95); 
+}

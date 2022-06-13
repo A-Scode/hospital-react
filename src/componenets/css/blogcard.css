@@ -1,0 +1,25 @@
+div.card{
+    min-width: 300px;
+    width: 80%;
+    max-width: 350px;
+    min-height: 400px;flex-direction: column;
+    display: flex;margin:auto;flex-wrap: wrap;
+    border : 2px solid rgb(226, 41, 41);margin: 10px auto;
+    border-radius: 20px;padding: 5px;
+}
+img.titleimg{
+    width:  100%;
+    aspect-ratio:  16 / 9;
+    height: 200px;object-fit: contain;border: 2px solid rgb(0, 140, 255);
+    border-radius: 20px;
+
+}span.category{
+    margin: 10px auto!important;
+}
+div.description{
+    text-align: left; font-size: 20px;text-indent: 10px;
+    height: 80px; overflow: hidden; display: -webkit-box;
+    padding : 0 10px;-webkit-line-clamp: 3;-webkit-box-orient: vertical;word-break: break-all;
+}span.date{
+    text-align: right;align-self: flex-end;
+}

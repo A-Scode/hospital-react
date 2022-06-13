@@ -1,9 +1,11 @@
-import { useCallback, useContext, useMemo, useRef } from "react";
+import { useCallback, useContext, useEffect, useMemo, useRef } from "react";
 import { Login_context } from "../App";
 import "./css/uploadblog.css"
 import uploadImg from './images/add_photo.svg'
 import configs from './../../configs.json'
 import { useHistory } from "react-router";
+import { useParams } from "react-router";
+
 
 
 const Uploadblog = props=>{
@@ -12,7 +14,40 @@ const Uploadblog = props=>{
     const ref = useRef({});
     const history = useHistory();
 
-    var old_data = {};
+
+    const {blog_id} = useParams();
+    
+    useEffect(()=>{
+        if(!login_context.login){
+            history.push("/");
+        }
+
+        let xhr = new XMLHttpRequest();
+        xhr.open("POST" , configs.api_base_url + "get_blog_data" );
+        xhr.setRequestHeader("blog-id" , blog_id);
+
+        xhr.onreadystatechange= ()=>{
+            if (xhr.readyState == 4 && xhr.status==200){
+                let response = JSON.parse(xhr.response);
+                if(response.status == "success"){
+                    let data = response.data;
+                    console.log(response.data);
+                    ref.current.blogimglabel.src = configs.api_base_url+"media/"+data['image_path'] ;
+                    ref.current.blogimglabel.style.backgroundImage = "none";
+                    ref.current.blog_title.value = data['blog_title'];
+                    ref.current.category.value = data['category'];
+                    ref.current.summary.innerText = data['summary'];
+                    ref.current.content.innerText = data['content'];
+
+
+                    
+                }
+            }
+        }
+        xhr.send();
+
+    } , [login_context])
+
 
     const changeImage = useCallback(()=>{
         let label = ref.current.blogimglabel;
@@ -27,17 +62,18 @@ const Uploadblog = props=>{
         }
     } , [ref])
 
-    const draft = useCallback(()=>{
+    const draft = useCallback((type)=>{
         if(ref.current.blog_title.value == ""){
             ref.current.blog_title.setCustomValidity("required");
             ref.current.blog_title.reportValidity();
         }
-        let data = {...old_data};
+        let data = blog_id?{'blog_id' : blog_id}:{};
         data['user_id'] = login_context.user_id;
         data['blog_title'] = ref.current.blog_title.value;
         data['category'] = ref.current.category.value;
-        data['summary'] = ref.current.summary.value;
-        data['content'] = ref.current.content.value;
+        data['summary'] = ref.current.summary.innerText;
+        data['content'] = ref.current.content.innerText;
+        data['type'] = type;
 
         let formdata = new FormData();
         if(ref.current.blogimg.files.length > 0){
@@ -46,19 +82,21 @@ const Uploadblog = props=>{
 
         let xhr = new XMLHttpRequest();
         xhr.open("POST" , configs.api_base_url + "draft_blog");
-        xhr.setRequestHeader('data' , JSON.stringify(data));
+        formdata.append('data' , JSON.stringify(data));
 
         xhr.onreadystatechange = ()=>{
             if(xhr.readyState ==4  && xhr.status ==200){
                 let response= JSON.parse(xhr.response);
                 if(response.status == "success"){
+                    alert("Successfully Uploaded!!!");
                     history.push("/" + login_context.user_id + "/drafts/");
                 }
             }
         }
+        xhr.send(formdata);
 
 
-    } , [ref])
+    } , [ref , login_context])
 
     return (
         <div className="blog_details">
@@ -82,7 +120,7 @@ const Uploadblog = props=>{
                 <tr>
                     <td><label htmlFor="category">Category</label></td>
                     <td>
-                        <select ref={el=>ref.current.categroy = el} required name  ="bd_form" id="category">
+                        <select ref={el=>ref.current.category = el} required name  ="bd_form" id="category">
                         <option value="Metal Helth">Metal Helth</option>
                         <option value="Heart Disease">Heart Disease</option>
                         <option value="COVID-19">COVID-19</option>
@@ -92,17 +130,17 @@ const Uploadblog = props=>{
                 </tr>
                 <tr>
                     <td><label htmlFor="summary">Summary</label></td>
-                    <td><textarea name  ="bd_form" required ref={el=>ref.current.summary = el}
-                      id="summary" maxLength={200} cols="20" rows="5"></textarea></td>
+                    <td><div name  ="bd_form" required ref={el=>ref.current.summary = el}
+                      id="summary" maxLength={200} cols="20" rows="5" contentEditable></div></td>
                 </tr>
                 <tr>
                     <td><label htmlFor="content">Content</label></td>
-                    <td><textarea name  ="bd_form" required id="content" ref={el=>ref.current.content = el}
-                     cols="20" rows="5"></textarea></td>
+                    <td><div name  ="bd_form" required id="content" ref={el=>ref.current.content = el}
+                     cols="20" rows="5" contentEditable></div></td>
                 </tr>
                 <tr>
-                    <td><button onClick = {draft} type="button" id="draft_button">Draft</button></td>
-                    <td><button type="submit" id="submit_button">Submit</button></td>
+                    <td><button onClick = {()=>draft("Draft")} type="button" id="draft_button">Draft</button></td>
+                    <td><button onClick = {()=>draft("Uploaded")}  type="submit" id="submit_button">Submit</button></td>
                 </tr>
             </table>
             </form>
