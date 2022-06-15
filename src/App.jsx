@@ -14,6 +14,8 @@ import { Draftblog } from './componenets/draft_blog'
 import { Uploadblog } from './componenets/uploadblog'
 import { Blog } from './componenets/blog'
 import { Blogcategory } from './componenets/blogscategory'
+import { Doctor_list } from './componenets/appointment'
+import { Appointmentform } from './componenets/appointmentform'
 
 
 const user_data_conext = React.createContext({});
@@ -74,7 +76,7 @@ function App() {
       <Appheader />
 
           <div style={{display:"flex",
-        placeItems : "center", justifyContent : "center",minHeight:"calc(100vh - 34pt - 20px)",padding:"0px 0" }}>
+        placeItems:"center", justifyContent : "center",minHeight:"calc(100vh - 34pt - 20px)",padding:"0px 0" }}>
     <Switch>
           <Route exact path = "/">
           {comp_state}
@@ -99,6 +101,12 @@ function App() {
         </Route>
         <Route exact path = "/:user_id?/BlogsCategory">
           <Blogcategory />
+        </Route>
+        <Route exact path = "/:user_id?/Appoint">
+          <Doctor_list />
+        </Route>
+        <Route exact path = "/:user_id?/Appoint/:doctor_id">
+          <Appointmentform />
         </Route>
   </Switch>
         </>

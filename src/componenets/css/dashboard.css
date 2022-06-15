@@ -1,6 +1,6 @@
 
 div.dashboard{
-    display: grid;
+    display: flex;flex-direction: column;
     width: 100%;align-self: flex-start;
     margin-bottom: 0;
 }
@@ -23,7 +23,7 @@ div.profile_photo img.photo{
     grid-area: photo; width: 125px; height: 125px;
     background-color: rgba(238, 238, 238, 0.743);border-radius: 100%;
     transform-origin: 50% 50%; transform: translateY(-50%);
-    border : 3px solid blue; justify-self: center;
+    border : 3px solid blue; justify-self: center;object-fit: contain;
     background-position: center;background-repeat: no-repeat;background-size: 100px 100px;
     
 }span.username{
@@ -35,9 +35,9 @@ grid-column: 1 / span 3; z-index: 1;
 }
 div.details{
     max-width: 600px;display: flex;flex-direction: column;
-    place-self: center;margin:50px auto;
+    place-self: center;margin:50px auto;width: calc(100vw - 20px);
     border: 2px solid rgba(253, 50, 50, 0.576); border-radius: 20px;
-    box-shadow: 5px 5px 15px 5px rgba(80, 80, 80, 0.5);
+    box-shadow: 5px 5px 15px 5px rgba(80, 80, 80, 0.5);overflow:scroll;
 }
 div.details:hover{
     box-shadow: 5px 5px 15px 5px rgba(80, 80, 80, 0.5),
@@ -57,12 +57,14 @@ div.details > table > tr > td{
 {
     div.dashboard{
         margin-left:300px;
-        margin-right:0;   
+        margin-right:0;width: calc(100vw - 300px); 
     }
     div.profile_photo{
         grid-template-areas: "grad grad grad" "username none photo";
     }span.username{
         margin-bottom: auto;
+    }div.details{
+        width: calc(100% - 20px);
     }
 }
 hr{

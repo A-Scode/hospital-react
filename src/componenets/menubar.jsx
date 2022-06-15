@@ -9,6 +9,7 @@ import upload_logo from "./images/upload.svg";
 import logout_logo from "./images/logout.svg";
 import menu1 from "./images/menu1.svg"
 import menu2 from "./images/menu2.svg"
+import doctor_logo from "./images/doctor.svg"
 import configs from "./../../configs.json"
 import { useHistory } from "react-router";
 
@@ -93,6 +94,10 @@ const Menubar = props=>{
             {login_context.user_type == "Doctor" ?<Link to = {"/" + login_context.user_id + "/drafts/"}>
                 <span className="icon" style = {{backgroundImage:`url(${upload_logo})`}} ></span>
                 <div className="nav_button">Upload Blog</div>
+            </Link> :null}
+            {login_context.user_type == "Patient" ?<Link to = {"/" + login_context.user_id + "/Appoint/"}>
+                <span className="icon" style = {{backgroundImage:`url(${doctor_logo})`}} ></span>
+                <div className="nav_button">Doctors</div>
             </Link> :null}
             {login_context.login?<Link className="logout" onClick={logout} >
                     <span className="icon" style = {{backgroundImage:`url(${logout_logo})`}} ></span>

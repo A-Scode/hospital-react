@@ -13,6 +13,7 @@ var Login = props=>{
 
     const login = useCallback(()=>{
 
+        console.log(user_data)
         let data = {};
         data['username'] = ref.current['username'].value;
         data['password'] = ref.current['password'].value;
