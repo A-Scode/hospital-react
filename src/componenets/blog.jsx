@@ -34,7 +34,7 @@ const Blog= props=>{
             className="blog_image" />
             <span className = "category">{data['category']}</span>
             <div className="blog_content">
-                <p>{data['content']}</p>
+                <p dangerouslySetInnerHTML={{__html : data['content']}}></p>
 
             </div>
         </div>

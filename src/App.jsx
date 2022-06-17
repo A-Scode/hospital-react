@@ -16,6 +16,7 @@ import { Blog } from './componenets/blog'
 import { Blogcategory } from './componenets/blogscategory'
 import { Doctor_list } from './componenets/appointment'
 import { Appointmentform } from './componenets/appointmentform'
+import { Recipt } from './componenets/recipt'
 
 
 const user_data_conext = React.createContext({});
@@ -107,6 +108,9 @@ function App() {
         </Route>
         <Route exact path = "/:user_id?/Appoint/:doctor_id">
           <Appointmentform />
+        </Route>
+        <Route exact path = "/:user_id?/Appoint/:appoint_id/receipt">
+          <Recipt />
         </Route>
   </Switch>
         </>

@@ -37,7 +37,7 @@ const Uploadblog = props=>{
                     ref.current.blog_title.value = data['blog_title'];
                     ref.current.category.value = data['category'];
                     ref.current.summary.innerText = data['summary'];
-                    ref.current.content.innerText = data['content'];
+                    ref.current.content.innerHTML = data['content'];
 
 
                     
@@ -72,7 +72,7 @@ const Uploadblog = props=>{
         data['blog_title'] = ref.current.blog_title.value;
         data['category'] = ref.current.category.value;
         data['summary'] = ref.current.summary.innerText;
-        data['content'] = ref.current.content.innerText;
+        data['content'] = ref.current.content.innerHTML;
         data['type'] = type;
 
         let formdata = new FormData();

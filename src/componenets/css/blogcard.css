@@ -18,7 +18,7 @@ img.titleimg{
 }
 div.description{
     text-align: left; font-size: 20px;text-indent: 10px;
-    height: 80px; overflow: hidden; display: -webkit-box;
+    height: 90px; overflow: hidden; display: -webkit-box;line-height: 30px;
     padding : 0 10px;-webkit-line-clamp: 3;-webkit-box-orient: vertical;word-break: break-all;
 }span.date{
     text-align: right;align-self: flex-end;

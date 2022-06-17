@@ -1,8 +1,10 @@
-import {useContext  , useRef , useEffect , useCallback} from 'react'
-import { useParams } from 'react-router-dom';
+import {useContext  , useRef , useEffect , useState, useCallback} from 'react'
+import { useParams  , useHistory} from 'react-router-dom';
 import { Login_context } from '../App';
 import { ImgUser } from './appointment';
 import "./css/appointmentform.css"
+import  moment from 'moment'
+import configs from "./../../configs.json"
 
 
 
@@ -82,7 +84,7 @@ const Appointmentform=props=>{
           if (resp.error !== undefined) {
             throw (resp);
           }
-          ref.current['authorize_button'].innerText = 'Refresh';
+          
           await listUpcomingEvents();
         };
 
@@ -116,43 +118,155 @@ const Appointmentform=props=>{
 
         const events = response.result.items;
         if (!events || events.length == 0) {
-          ref.current['content'].innerText = 'No events found.';
+          
           return;
         }
         // Flatten to string to display
         const output = events.reduce(
             (str, event) => `${str}${event.summary} (${event.start.dateTime || event.start.date})\n`,
             'Events:\n');
-        ref.current['content'].innerText = output;
       })
 
-      function insert_event (){
-        gapi.client.calendar.events.insert({})
-      }
+      const[doctor_details , set_doctor_details] = useState({});
+      const[paitient_details , set_paitient_details] = useState({});
+      
+      useEffect(()=>{
+        let xhr = new XMLHttpRequest();
+        
+        xhr.open('POST' , configs.api_base_url+ "get_user_details");
+        xhr.setRequestHeader('userid'  , JSON.stringify(doctor_id));
+        
+        xhr.onreadystatechange = ()=>{
+            if(xhr.readyState ==4 && xhr.status == 200){
+                let response = JSON.parse(xhr.response);
+                console.log(response);
+                
+                if(response["status"] == "fail"){
+                    alert("no doctor exists");
+                }else{
+                    set_doctor_details({ ...JSON.parse(response['data'])});
+                }
+            }
+        }
+        xhr.send();
 
+        let xhr1 = new XMLHttpRequest();
+        
+        xhr1.open('POST' , configs.api_base_url+ "get_user_details");
+        xhr1.setRequestHeader('userid'  , JSON.stringify(login_context.user_id));
+        
+        xhr1.onreadystatechange = ()=>{
+            if(xhr1.readyState ==4 && xhr1.status == 200){
+                let response = JSON.parse(xhr1.response);
+                console.log(response);
+                
+                if(response["status"] == "fail"){
+                    alert("no doctor exists");
+                }else{
+                    set_paitient_details({ ...JSON.parse(response['data'])});
+                }
+            }
+        }
+        xhr1.send();
+
+
+      } , [])
+
+      const history = useHistory();
+    
+      const confirm_appoint = useCallback(()=> {
+
+          const date = ref.current['date'].value;
+          const start_time = ref.current['start_time'].value;
+
+          const tmp_date = new Date(  date+"T"+start_time+":00");
+
+         
+          console.log(moment(tmp_date).add(45, 'minutes').format());
+
+
+          handleAuthClick();
+
+          var event = {
+            'summary': 'Appointment with '+doctor_details.firstname + " " +doctor_details.lastname,
+            'location': doctor_details.address,
+            'description': 'Appointted doctor '+doctor_details.firstname + " " +doctor_details.lastname +" as "+ ref.current['req_speciality'],
+            'start': {
+              'dateTime':  moment(tmp_date).toISOString() ,
+              'timeZone' : "Asia/Kolkata" 
+    
+              
+            },
+            'end': {
+              'dateTime': moment(tmp_date).add(45 , 'minutes').toISOString(),
+              'timeZone' : "Asia/Kolkata" 
+              
+            }
+          };
+
+          var request = gapi.client.calendar.events.insert({
+            'calendarId': 'primary',
+            'resource': event
+          });
+          
+          request.execute();
+
+          let data  = {
+            doctor_id : doctor_id,
+            paitient_id : login_context.user_id,
+            doctor_name : `${login_context.firstname} ${login_context.lastname}`,
+            req_speciality : ref.current["req_speciality"].value,
+            date: moment(tmp_date).format("YYYY-MM-DD"),
+            start_time : moment(tmp_date).format("HH:mm:ss"),
+            end_time : moment(tmp_date).add(45 , 'minutes').format("HH:mm:ss")
+          }
+
+          let xhr = new XMLHttpRequest();
+          xhr.open('POST' , configs.api_base_url+"book_appointment");
+          xhr.setRequestHeader('data' , JSON.stringify(data));
+
+          xhr.onreadystatechange=()=>{
+            if (xhr.readyState ==4 && xhr.status==200){
+              let response = JSON.parse(xhr.response);
+              if(response.status == "success"){
+                let appoint_id = response.appoint_id;
+                console.log(appoint_id);
+
+                setTimeout(()=>history.push("/"+login_context.user_id+"/Appoint/"+appoint_id+"/receipt"),
+                5000);
+
+              }
+            }
+          }
+
+          xhr.send();
+
+          // window.location.href = "/"+login_context.user_id +"/Appoint/"+doctor_id+"/receipt";
+          
+          
+
+      } ,[ref , doctor_details])
+
+      const date = new Date();
 
 
 
     return (
         <div className="form_container">
 
-<button id="authorize_button" ref = {el=>ref.current.authorize_button=el} hidden onClick={handleAuthClick}>Authorize</button>
-    
-    <div id="content" ref ={el=>ref.current.content=el} style={{whiteSpace:"pre"}}></div>
-
-
-
 
             <h1  align= "center" >Appointment</h1>
-            <form action="javascript:void(0);"  className="appoint_form">
+            <form action="javascript:void(0);"  onSubmit={confirm_appoint} className="appoint_form">
                 <ImgUser user_id = {doctor_id} size= {150} />
                 <label htmlFor="req_speciality">Required Speciality</label>
-                <input required type="text" max={200} id="req_speciality" />
-                <label htmlFor="date">Date</label>
-                <input required type="date" id="date" />
+                <input required type="text" max={200} id="req_speciality" ref={el=>ref.current["req_speciality"]=el} />
+                <label htmlFor="date" min ={ `${date.getFullYear()}-${'0'?date.getMonth() < 10:null}${date.getMonth()}-${'0'?date.getDate() < 10:null}${date.getDate()}`}>Date</label>
+                <input onInput={e=>console.log( e.target.value)}
+                 required type="date" min={moment().format('YYYY-MM-DD')} id="date" ref={el=>ref.current["date"]=el} />
                 <label htmlFor="start_time">Start Time</label>
-                <input required type="time" id="start_time" />
-                <button className='confirm_form' onClick={handleAuthClick} >Confirm</button>
+                <input  onInput={e=>console.log( e.target.value)}
+                required type="time" id="start_time" ref={el=>ref.current["start_time"]=el} min={"09:00"} max={"19:00"}  />
+                <button className='confirm_form' type="submit"  >Confirm</button>
             </form>
         </div>
     );
