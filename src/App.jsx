@@ -79,7 +79,7 @@ function App() {
           <div style={{display:"flex",
         placeItems:"center", justifyContent : "center",minHeight:"calc(100vh - 34pt - 20px)",padding:"0px 0" }}>
     <Switch>
-          <Route exact path = "/hospital-react">
+          <Route exact path = "/">
           {comp_state}
         </Route>
 
